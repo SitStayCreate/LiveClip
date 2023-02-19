@@ -1,4 +1,4 @@
-outlets = 2;
+outlets = 1;
 //Log function from compusition
 function log() {
   for(var i=0,len=arguments.length; i<len; i++) {
@@ -43,7 +43,6 @@ function setNotes(notesString){
 	//This isn't necessary in newer versions of Max, can just use args
     var notesArgs = notesString.split(" ");
 	var argsLength = notesArgs.length;
-
 	//API calls to set notes
     clip.call("set_notes");
     clip.call("notes", (argsLength / 5));
@@ -75,21 +74,20 @@ function replaceAllNotes(notesString){
 		clip.call("done");
 	} else {
 		//This isn't necessary in newer versions of Max, can just use args
-    	var notesArgs = notesString.split(" ");
-		var argsLength = notesArgs.length;
-		
+		var notes = notesString.split(";")
 		//API calls to replace notes
 		clip.call("select_all_notes");
 		clip.call("replace_selected_notes");
 
-		clip.call("notes", (argsLength / 5));
-		for(var i = 0; i < argsLength; i+=5){
+		clip.call("notes", (notes.length -1));
+		for(var i = 0; i < (notes.length - 1); i++){
+			var note = notes[i].split(",");
     		clip.call("note", 
-				notesArgs[i],
-				notesArgs[(i+1)],
-				notesArgs[(i+2)],
-				notesArgs[(i+3)],
-				notesArgs[(i+4)]);
+				note[0],
+				note[1],
+				note[2],
+				note[3],
+				true);
 		}
     	clip.call("done");
 	}
